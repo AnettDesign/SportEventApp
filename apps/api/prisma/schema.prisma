@@ -1,0 +1,244 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  USER
+  ORGANIZER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+  ATTENDED
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  CANCELED
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum EventFormat {
+  TRAINING
+  TOURNAMENT
+  SECTION
+  MATCH
+}
+
+enum NotificationType {
+  BOOKING_REQUESTED
+  BOOKING_CONFIRMED
+  BOOKING_REJECTED
+  WAITLISTED
+  EVENT_UPDATED
+  EVENT_CANCELED
+  CHECKED_IN
+}
+
+enum EventRequestStatus {
+  OPEN
+  PLANNED
+  CLOSED
+}
+
+enum DemandVoteType {
+  DATE
+  LOCATION
+  TIME
+}
+
+enum ActivityType {
+  EVENT_CREATED
+  EVENT_UPDATED
+  EVENT_CANCELED
+  BOOKING_REQUESTED
+  BOOKING_CONFIRMED
+  BOOKING_REJECTED
+  BOOKING_CANCELED
+  WAITLISTED
+  CHECKED_IN
+}
+
+model User {
+  id             String         @id @default(uuid())
+  email          String         @unique
+  name           String
+  passwordHash   String
+  role           Role           @default(USER)
+  bookings       Booking[]
+  events         Event[]
+  waitlist       WaitlistEntry[]
+  notifications  Notification[]
+  activities     ActivityLog[]  @relation("ActorActivities")
+  sportProfile   UserSportProfile?
+  eventRequests  EventRequest[]
+  eventReviews   EventReview[]
+  demandVotes    EventDemandVote[]
+  createdAt      DateTime       @default(now())
+}
+
+model Event {
+  id            String         @id @default(uuid())
+  title         String
+  description   String?
+  sportType     String
+  level         SkillLevel
+  format        EventFormat
+  startAt       DateTime
+  location      String
+  capacity      Int
+  available     Int
+  status        EventStatus    @default(PUBLISHED)
+  views         Int            @default(0)
+  waitlist      WaitlistEntry[]
+  organizerId   String
+  organizer     User           @relation(fields: [organizerId], references: [id])
+  bookings      Booking[]
+  activities    ActivityLog[]
+  reviews       EventReview[]
+  demandVotes   EventDemandVote[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Booking {
+  id            String        @id @default(uuid())
+  createdAt     DateTime      @default(now())
+  status        BookingStatus @default(PENDING)
+  checkedInAt   DateTime?
+  rejectReason  String?
+  userId        String
+  eventId       String
+  user          User          @relation(fields: [userId], references: [id])
+  event         Event         @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
+}
+
+model WaitlistEntry {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    String
+  eventId   String
+  position  Int
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
+  @@index([eventId, createdAt])
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  createdAt DateTime         @default(now())
+  readAt    DateTime?
+  type      NotificationType
+  title     String
+  message   String
+  userId    String
+  eventId   String?
+  bookingId String?
+  user      User             @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+}
+
+
+model UserSportProfile {
+  id                String       @id @default(uuid())
+  userId            String       @unique
+  favoriteSport     String?
+  level             SkillLevel?
+  preferredFormat   EventFormat?
+  preferredLocation String?
+  maxParticipants   Int?
+  preferredTime     String?
+  notes             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  user              User         @relation(fields: [userId], references: [id])
+}
+
+model EventRequest {
+  id            String             @id @default(uuid())
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  sportType     String
+  level         SkillLevel
+  format        EventFormat
+  location      String
+  preferredDate DateTime?
+  comment       String?
+  status        EventRequestStatus @default(OPEN)
+  userId        String
+  user          User               @relation(fields: [userId], references: [id])
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+}
+
+model EventReview {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  rating      Int
+  comment     String?
+  recommend   Boolean  @default(true)
+  userId      String
+  eventId     String
+  bookingId   String?
+  user        User     @relation(fields: [userId], references: [id])
+  event       Event    @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId])
+  @@index([eventId, createdAt])
+}
+
+model EventDemandVote {
+  id        String         @id @default(uuid())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  type      DemandVoteType
+  value     String
+  comment   String?
+  userId    String
+  eventId   String
+  user      User           @relation(fields: [userId], references: [id])
+  event     Event          @relation(fields: [eventId], references: [id])
+
+  @@unique([userId, eventId, type])
+  @@index([eventId, type])
+  @@index([userId, createdAt])
+}
+
+model ActivityLog {
+  id        String       @id @default(uuid())
+  createdAt DateTime     @default(now())
+  type      ActivityType
+  message   String
+  details   String?
+  actorId   String?
+  eventId   String?
+  bookingId String?
+  actor     User?        @relation("ActorActivities", fields: [actorId], references: [id])
+  event     Event?       @relation(fields: [eventId], references: [id])
+
+  @@index([eventId, createdAt])
+  @@index([actorId, createdAt])
+}
