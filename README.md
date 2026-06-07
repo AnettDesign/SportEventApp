@@ -1,185 +1,216 @@
-# Turborepo starter
 
-This Turborepo starter is maintained by the Turborepo core team.
+# 📘 Sport Events Management System
 
-## Using this example
+> Вебзастосунок для пошуку, резервування та адміністрування спортивних заходів з підтримкою ролей користувача, організатора та адміністратора.
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest
-```
+## 👤 Автор
 
-## What's inside?
+- **ПІБ**:Михалко Анна
+- **Група**: ФЕІ-45
+- **Керівник**: доцент Вельгош Сергій
+- **Дата виконання**: [27.05.2026]
 
-This Turborepo includes the following packages/apps:
+---
 
-### Apps and Packages
+## 📌 Загальна інформація
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **Тип проєкту**: Вебзастосунок
+- **Frontend:** Next.js, React, TypeScript, Tailwind CSS
+- **Backend:** NestJS, TypeScript
+- **База даних:** SQLite
+- **ORM:** Prisma ORM
+- **Авторизація:** JWT Authentication
+- **Менеджер пакетів:** PNPM
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+---
 
-### Utilities
+## 🧠 Опис функціоналу
 
-This Turborepo has some additional tools already setup for you:
+**Для користувача**:
+- Реєстрація та авторизація
+- Перегляд спортивних заходів
+- Пошук, фільтрація та сортування подій
+- Отримання рекомендацій подій
+- Подання заявки на участь
+- Перегляд історії участі
+- Отримання сповіщень
+**Для організатора:**
+- Створення спортивних подій
+- Редагування та видалення подій
+- Перегляд заявок учасників
+- Підтвердження та відхилення заявок
+- Виконання check-in учасників
+- Експорт списку учасників
+**Для адміністратора:**
+- Перегляд аналітики системи
+- Контроль подій
+- Перегляд журналу дій
+- Моніторинг активності користувачів
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+---
 
-### Build
+## 🧱 Основні модулі системи
 
-To build all apps and packages, run the following command:
+| Модуль                | Призначення |
+|-----------------------|-------------|
+| `AuthModule`          | Реєстрація та авторизація користувачів |
+| `EventsModule`        | Керування спортивними подіями |
+| `NotificationsModule` | Обробка заявок на участь |
+| `AnalyticsModule`     | Формування статистики |
+| `Waitlist`            | Список очікування при відсутності місць |
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+---
 
-```sh
-cd my-turborepo
-turbo build
-```
+## ▶️ Як запустити проєкт "з нуля"
 
-Without global `turbo`, use your package manager:
+### 1. Встановлення інструментів
 
-```sh
-cd my-turborepo
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+- Node.js 22+
+- PNPM
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo build --filter=docs
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
-
-
-## Demo startup
-
-### Backend
+### 2. Клонування репозиторію
 
 ```bash
+git clone <repository-url>
+cd SportEventApp
+```
+
+### 3. Встановлення залежностей
+
+pnpm install
+
+# Налаштування середовища
+
+Файл:
+
+apps/api/.env
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="super-secret-key"
+JWT_EXPIRES_IN="7d"
+PORT=3001
+CORS_ORIGIN=http://localhost:3000
+
+# Генерація Prisma Client
 cd apps/api
-node node_modules/prisma/build/index.js generate
-node node_modules/prisma/build/index.js migrate dev
-node node_modules/ts-node/dist/bin.js --transpile-only prisma/seed.ts
-node dist/main.js
-```
+pnpm prisma generate
 
-### Frontend
+# Заповнення тестовими даними
+pnpm prisma db seed
 
-```bash
-cd apps/web
-next dev
-```
+# Запуск Backend
+pnpm --filter api start:dev
 
-### Demo accounts
+# Запуск Frontend
+pnpm --filter web dev
 
-- admin@test.com / 123456
-- organizer@test.com / 123456
-- u1@test.com / 123456
+Після запуску система буде доступна за адресою:
+
+Frontend: http://localhost:3000
+Backend: http://localhost:3001
+
+---
+
+### 🔐 Тестові облікові записи
+
+**Адміністратор**
+
+Email: admin@test.com 
+Пароль: 123456
+
+
+**Організатор** 
+
+Email: organizer@test.com
+Пароль: 123456
+
+**Користувач**
+Email: u1@test.com
+Пароль: 123456
+
+---
+
+### 🔌 Основні API маршрути
+
+**Авторизація**
+
+POST /auth/register
+POST /auth/login
+
+**Події**
+
+GET    /events
+GET    /events/recommended
+GET    /events/:id
+POST   /events
+PATCH  /events/:id
+DELETE /events/:id
+
+**Заявки**
+
+GET    /events/:id/bookings
+POST   /events/:id/bookings
+PATCH  /bookings/:id
+POST   /events/:eventId/bookings/:bookingId/check-in
+
+**Сповіщення**
+
+GET  /notifications/my
+POST /notifications/read-all
+
+**Аналітика**
+
+GET /events/analytics/overview
+
+---
+
+## 🖱️ Інструкція для користувача
+
+1. Увійти до системи під одним із тестових облікових записів.
+
+2. Перейти до сторінки подій.
+
+3. Використати пошук або фільтри для пошуку потрібного заходу.
+
+4. Відкрити сторінку події та подати заявку на участь.
+
+5. Відстежувати статус заявки в особистому кабінеті та через систему сповіщень.
+
+6. Організатор може підтвердити або відхилити заявку, а також виконати check-in учасників.
+---
+
+## 📊 Реалізовані можливості
+- Пошук подій
+- Фільтрація та сортування
+- Рекомендації подій
+- Подання заявок
+- Підтвердження та відхилення заявок
+- Waitlist
+- Check-in учасників
+- Система сповіщень
+- Журнал дій
+- Аналітика
+- Рольовий доступ
+
+## 🧪 Проблеми і рішення
+
+| Проблема              | Рішення                          |
+|-----------------------|----------------------------------|
+| Prisma Client Error   | Виконати prisma generate         |
+| Database Error        | Перевірити DATABASE_URL          |
+| JWT Error             | Перевірити JWT_SECRET            |
+| CORS Error            | Перевірити CORS_ORIGIN           |
+| Port already in use   | Змінити порт або завершити процес|
+
+---
+
+## 🧾 Використані джерела / література
+
+- NestJS Documentation.
+- Next.js Documentation.
+- Prisma ORM Documentation.
+- React Documentation.
+- TypeScript Documentation.
+- JWT Documentation.
+- PNPM Documentation.
